@@ -58,7 +58,6 @@ $(() => {
     console.log(`toggle clicked on ${clickedIndex}`)
     STORE.items[clickedIndex].completed = !STORE.items[clickedIndex].completed
     displayItems()
-
   }))
 
   displayItems()
