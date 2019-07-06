@@ -32,14 +32,14 @@ function displayItems() {
 
 }
 
-//item should be an object from STORE.shoppingItems
+//
 function toggleCompleted(event) {
   const clickedIndex = $(event.target).attr('data-index')
   const item = STORE.shoppingItems[clickedIndex]
 
   // flip the completed property
   item.completed = !item.completed
-  
+
   //data has changed, so re-display
   displayItems()
 }
