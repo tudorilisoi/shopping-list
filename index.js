@@ -1,64 +1,50 @@
+//the source of truth
 const STORE = {
-  items: [
+  shoppingItems: [
     {
-      title: 'monkeys',
-      completed: true,
-    },
-    {
-      title: 'bananas',
+      title: 'get milk',
       completed: false,
     },
+    {
+      title: 'get bread',
+      completed: false,
+    },
+    {
+      title: 'get bananas',
+      completed: true,
+    }
   ]
 }
 
+
 function displayItems() {
-  const html = STORE.items.map((item, index) =>
-    `
-  <li>
-        <span class="
-        shopping-item 
-        ${item.completed ? 'shopping-item__checked' : ''}">${item.title}</span>
-        <div class="shopping-item-controls">
-          <button data-id="${index}" class="shopping-item-toggle">
-            <span class="button-label">check</span>
-          </button>
-          <button class="shopping-item-delete">
-            <span class="button-label">delete</span>
-          </button>
-        </div>
-   </li>
-  `
-  ).join('')
-  jQuery('.shopping-list').html(html)
-}
+  const listElement = $('.shopping-list')
+  console.log('list element:', listElement)
 
-//start the app
-$(() => {
-
-  $('#js-shopping-list-form').on('submit', ev => {
-    ev.preventDefault();
-    const inputText = $('#shopping-list-entry').val()
-    if (!inputText) {
-      return alert('Please enter an item title!')
-    } else {
-      const item = {
-        title: inputText,
-        completed: false
-      }
-      STORE.items.unshift(item)
-      displayItems()
-    }
-
-
+  //clear the list
+  listElement.empty()
+  STORE.shoppingItems.forEach((itemObj, idx) => {
+    const completedClassName = itemObj.completed ? 'completed' : ''
+    const itemHTML = `<li class="${completedClassName}" data-index="${idx}">${itemObj.title}</li>`
+    console.log(itemObj)
+    listElement.append(itemHTML)
   })
 
-  $('body').on('click', '.shopping-item-toggle', (ev => {
-    ev.preventDefault();
-    const clickedIndex = $(event.target).parents('.shopping-item-toggle').attr('data-id')
-    console.log(`toggle clicked on ${clickedIndex}`)
-    STORE.items[clickedIndex].completed = !STORE.items[clickedIndex].completed
-    displayItems()
-  }))
+}
 
+//item should be an object from STORE.shoppingItems
+function toggleCompleted(event) {
+  const clickedIndex = $(event.target).attr('data-index')
+  const item = STORE.shoppingItems[clickedIndex]
+
+  // flip the completed property
+  item.completed = !item.completed
+  
+  //data has changed, so re-display
   displayItems()
+}
+
+$(displayItems)
+$(() => {
+  $('.shopping-list').on('click', 'li', toggleCompleted)
 })
